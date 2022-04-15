@@ -1,0 +1,1 @@
+time ./bench_s3_cp.sh | tee bench_s3_cp.log

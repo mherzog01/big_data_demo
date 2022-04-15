@@ -1,0 +1,1 @@
+aws s3 ls s3://multimedia-commons/data/images --recursive > all.txt 2>&1

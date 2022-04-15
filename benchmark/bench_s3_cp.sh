@@ -18,12 +18,13 @@ for img_dir in $img_dirs
 do
     #echo $img_dir
     # https://stackoverflow.com/questions/2172352/in-bash-how-can-i-check-if-a-string-begins-with-some-value
-    if [[ ! "$img_dir" =~ 00./ ]]
+    if [[ ! ("$img_dir" =~ 00./) && ! ("$img_dir" =~ 01./)  ]]
     then
         continue
     fi
     prefix="s3://multimedia-commons/data/images/${img_dir}"
     #echo "Listing $prefix"
-    aws s3 cp $prefix data --recursive
+    aws s3 cp $prefix data --recursive --no-progress
+    rm -r data
 done
 echo "`date`:  Process complete"
