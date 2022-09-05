@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Processes batches of up to 10 records.  Takes 0.5 sec/rec.
+Resources:
+  worker:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.9
+      CodeUri: .
+      Description: Processes batches of up to 10 records.  Takes 0.5 sec/rec.
+      MemorySize: 128
+      Timeout: 7
+      Role: 'arn:aws:iam::883375387566:role/service-role/invoke_workers-role-yrt1rhut'

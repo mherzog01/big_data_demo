@@ -1,0 +1,1 @@
+create table demo_scale (event_date datetime, varchar(50))
