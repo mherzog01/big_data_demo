@@ -1,3 +1,3 @@
 while ($true){
-	gc sorel_binaries.txt | measure
+	gc sorel_binaries.txt | measure 
 }

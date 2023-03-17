@@ -1,6 +1,7 @@
 $work_dir = "c:/tmp/work1"
 $log_file = "$work_dir/sorel_binaries_timing.log"
 
+write-output "Working directory = $work_dir"
 set-location $work_dir
 
 get-date > $log_file
