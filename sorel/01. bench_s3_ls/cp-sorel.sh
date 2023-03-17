@@ -1,6 +1,6 @@
 $work_dir="`pwd`"
 $data_dir="$work_dir/data"
-$log_file="$data_dir/sorel_binaries_timing.log"
+$log_file="$data_dir/cp-sorel.log"
 
 echo "Working directory = $work_dir"
 echo "Data directory = $data_dir"

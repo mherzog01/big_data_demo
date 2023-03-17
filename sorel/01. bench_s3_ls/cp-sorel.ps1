@@ -1,6 +1,6 @@
 $work_dir = "c:/tmp/work1"
 $data_dir = "$work_dir/data"
-$log_file = "$work_dir/sorel_binaries_timing.log"
+$log_file = "$work_dir/cp-sorel.log"
 
 write-output "Working directory = $work_dir"
 write-output "Data directory = $data_dir"
