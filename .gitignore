@@ -1,2 +1,3 @@
 sorel/01. bench_s3_ls/sorel_binaries_timing.log
 sorel/01. bench_s3_ls/sorel_binaries.txt
+tmp/**
