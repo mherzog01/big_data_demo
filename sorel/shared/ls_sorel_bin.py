@@ -6,13 +6,14 @@
 import boto3
 import ctypes
 import multiprocessing
+import datetime
 
 def validate_hex_digits(s3, bucket, prefix):
     # Make sure the first character under the prefix is some hex digit
     resp = s3.list_objects_v2(Bucket=bucket, Prefix=prefix, MaxKeys=1)
     assert('0' <= resp['Contents'][0]['Key'][len(prefix)] <= 'f')
     # Make sure there's nothing after 'f'
-    resp = s3.list_objects_v2(Bucket=bucket, Prefix=prefix + "g", MaxKeys=1)
+    resp = s3.list_objects_v2(Bucket=bucket, Prefix=prefix + "g", MaxKeys=1, StartAfter=prefix+'g')
     assert('Contents' not in resp)
 
 def worker(queue, queue_out, jobs):
@@ -44,7 +45,17 @@ def worker(queue, queue_out, jobs):
                 queue.put((bucket, prefix, resp['NextContinuationToken']))
                 jobs.value += 1
 
+def logmsg(msg):
+    print(msg)
+
+def logmsg01(msg):
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    logmsg(f'{timestamp}: {msg}')
+
 def main():
+
+    logmsg01('Process begins')
+
     bucket = 'sorel-20m'
     prefix = '09-DEC-2020/binaries/'
 
@@ -78,7 +89,10 @@ def main():
         proc.start()
         procs.append(proc)
 
-    # While the workers are working, pull down pages and do something with them
+    # While the workers are working, pull down objects and process them
+    num_found = 0
+    tot_size = 0
+    print(f'Listing contens of {bucket}/{prefix} with {workers} workers')
     while workers > 0:
         result = queue_out.get()
         if result is None:
@@ -87,7 +101,14 @@ def main():
         else:
             for cur in result:
                 # Just show the results like the AWS CLI does
-                print(f"{cur['LastModified'].strftime('%Y-%m-%d %H:%M:%S')} {cur['Size']:10d} {cur['Key'][len(prefix):]}")
+                #print(f"{cur['LastModified'].strftime('%Y-%m-%d %H:%M:%S')} {cur['Size']:10d} {cur['Key'][len(prefix):]}")
+                num_found += 1
+                tot_size += cur['Size']
+                if num_found % (1000 * 1000) == 0:
+                    logmsg01(f'Found {num_found}.  # workers = {workers}.')
+
+    logmsg01('Process ends')
+    return (num_found, tot_size)
 
     # Clean up
     for proc in procs:
@@ -95,3 +116,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Number of files = 9,919,065
+    # Size of data = 9,520,774,877,970
