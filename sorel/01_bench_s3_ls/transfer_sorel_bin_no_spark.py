@@ -14,6 +14,7 @@ import datetime
 import pyarrow as pa
 import pyarrow.parquet as pq
 import os
+import sys
 
 # %%
 # Source
@@ -25,8 +26,7 @@ SRC_PATH = f'{BUCKET_PATH}/{PREFIX}'
 MB = 1024 * 1024
 
 # %%
-os.environ['AWS_PROFILE'] = 'personal'  # Needed by pyarrow
-session = boto3.Session(profile_name='personal')
+session = boto3.Session()
 s3 = session.resource('s3')
 
 def get_objects(filter_chars: str, bucket: str, prefix: str) -> List[str]:
@@ -48,14 +48,16 @@ def logmsg01(msg):
     logmsg(f'{datetime.datetime.now():%Y-%m-%d %H:%M:%S}:  {msg}')
 
 # %%
-filter_chars = '0000'
+#filter_chars = '0000'
+filter_chars = sys.argv[1]
+print(f'Filter={filter_chars}')
 
 # %%
 objects = get_objects(filter_chars, BUCKET, PREFIX)
 num_objects = len([o for o in objects])
 
 #max_size = 1024 * MB
-max_size = 10 * MB
+max_size = 100 * MB
 cur_size = 0
 cur_num_rec = 0
 tot_size = 0
@@ -96,7 +98,7 @@ for i, o in enumerate(objects):
         logmsg01(f'Writing {cur_num_rec} keys with content.  Size={cur_size}.')
         # https://stackoverflow.com/questions/58818227/how-to-write-pyarrow-parquet-data-to-s3-bucket
         pq.write_to_dataset(table, 
-                            root_path=f's3://sorel-20m-demo/output_no_spark/', 
+                            root_path=f's3://sorel-20m-demo/output_no_spark/{filter_chars}/', 
                             #filesystem=s3,
                             existing_data_behavior="delete_matching" if delete_target else "overwrite_or_ignore",
                             compression='snappy')
