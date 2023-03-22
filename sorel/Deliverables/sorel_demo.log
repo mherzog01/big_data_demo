@@ -1,0 +1,27 @@
+Process begins
+
+Initiating listing of source files
+
+Launching Glue jobs
+
+Process duration:  10:04:39
+
+Parquet files created
+2023-03-20 09:57:15  304919267 output/00/part-00000-92cbd3c5-b09c-493b-bab7-de34c4204286-c000.snappy.parquet
+2023-03-20 09:57:14  299356093 output/00/part-00001-92cbd3c5-b09c-493b-bab7-de34c4204286-c000.snappy.parquet
+...
+2023-03-20 17:55:03      37127 output/ff/part-01478-59cca2fa-cecc-4305-b905-cb47c3b93a25-c000.snappy.parquet
+2023-03-20 17:54:56      11849 output/ff/part-01479-59cca2fa-cecc-4305-b905-cb47c3b93a25-c000.snappy.parquet
+
+Total Objects: 378,273
+   Total Size: 9.5 GB
+
+Reconciliation
+--------------
+Source	         # Rows 	 Size
+Bucket listing   9,919,065 	 9,520,774,877,970 
+Athena query     9,919,065 	 9,520,774,877,970 
+
+Transfer successful
+
+Process ends - return code = 0
